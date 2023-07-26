@@ -134,12 +134,13 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-
+/* WEBPACK VAR INJECTION */(function(uni) {
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
+var _index = __webpack_require__(/*! ../../uni_modules/uni-id-pages/uniCloud/cloudfunctions/uni-id-co/index.obj */ 387);
 //
 //
 //
@@ -150,9 +151,16 @@ var _default = {
   data: function data() {
     return {};
   },
-  methods: {}
+  methods: {
+    toLogin: function toLogin() {
+      uni.navigateTo({
+        url: '/uni_modules/uni-id-pages/pages/login/login-withpwd?uniIdRedirectUrl=%252Fpages%252Findex%252Findex'
+      });
+    }
+  }
 };
 exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ })
 

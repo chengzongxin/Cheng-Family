@@ -1,1 +1,1 @@
-<view>forth page</view>
+<view><button data-event-opts="{{[['tap',[['toLogin',['$event']]]]]}}" bindtap="__e">登录</button></view>
