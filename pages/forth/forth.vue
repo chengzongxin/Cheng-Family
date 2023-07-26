@@ -59,7 +59,7 @@
 				
 				console.log('fromDbData', res.result.data);
 				const data = res.result.data[0]
-				if (data) {
+				if (data.nickname.length > 0) {
 					this.data = data
 					this.hasData = true
 				}
@@ -89,13 +89,11 @@
 		margin-top: 100rpx;
 	}
 	.container {
-		position:relative;
-		height: 750rpx;
 	}
 	.bottomBar {
-		position: absolute;
-		left: 50%;
+		margin-top: 100rpx;
+/* 		left: 50%;
 		bottom: 0;
-		transform: translateX(-50%);
+		transform: translateX(-50%); */
 	}
 </style>

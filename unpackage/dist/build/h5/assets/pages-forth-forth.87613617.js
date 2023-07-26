@@ -1,1 +1,0 @@
-import{o as e,c as t,w as a,i as o,b as r}from"./index-01da69bd.js";import{_ as s}from"./_plugin-vue_export-helper.1b428a4d.js";const n=s({data:()=>({}),methods:{}},[["render",function(s,n,p,u,d,f){const i=o;return e(),t(i,null,{default:a((()=>[r(" forth page ")])),_:1})}]]);export{n as default};
