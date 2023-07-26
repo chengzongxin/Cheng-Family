@@ -1,0 +1,1 @@
+import{o as e,c as t,w as a,i as r,b as s}from"./index-01da69bd.js";import{_ as o}from"./_plugin-vue_export-helper.1b428a4d.js";const n=o({data:()=>({}),methods:{}},[["render",function(o,n,d,i,p,u){const l=r;return e(),t(l,null,{default:a((()=>[s(" third page ")])),_:1})}]]);export{n as default};

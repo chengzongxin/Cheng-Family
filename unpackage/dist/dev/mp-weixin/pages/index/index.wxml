@@ -1,0 +1,1 @@
+<view class="content"><image class="logo" src="/static/logo.png"></image><view class="text-area"><text class="title">{{title}}</text></view><view><label class="icon iconfont icon-chucundingweiqi _span"></label><label class="icon iconfont icon-xinhao _span"></label></view></view>
