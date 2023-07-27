@@ -9,7 +9,6 @@
 			<span class="icon iconfont icon-xinhao"></span>
 		</view>
 		
-		{{title}}
 	</view>
 </template>
 

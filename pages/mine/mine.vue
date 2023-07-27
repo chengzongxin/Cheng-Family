@@ -16,7 +16,10 @@
 		
 		<view class="bottomBar">
 			<button v-if="hasData == false" @click="toLogin">登录</button>
-			<button v-else @click="getUserInfo">更新个人信息</button>
+			<view v-else>
+				<button @click="getUserInfo">更新个人信息</button>
+				<button @click="logout">退出</button>
+			</view>
 		</view>
 	</view>
 </template>
@@ -48,6 +51,9 @@
 				uni.navigateTo({
 					url: `/uni_modules/uni-id-pages/pages/login/login-withpwd?uniIdRedirectUrl=%252Fpages%252F${this.curpage}%252F${this.curpage}`,
 				})
+			},
+			logout() {
+				mutations.logout()
 			},
 			async getUserInfo() {
 				console.log("update")

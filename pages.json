@@ -28,7 +28,7 @@
             
         }
         ,{
-            "path" : "pages/forth/forth",
+            "path" : "pages/mine/mine",
             "style" :                                                                                    
             {
 				"navigationStyle": "custom",
@@ -167,8 +167,8 @@
 				"selectedIconPath": "static/news-active.png"
 			},
 			{
-				"pagePath": "pages/forth/forth",
-				"text": "forth",
+				"pagePath": "pages/mine/mine",
+				"text": "mine",
 				"iconPath": "static/member.png",
 				"selectedIconPath": "static/member-active.png"
 			}
