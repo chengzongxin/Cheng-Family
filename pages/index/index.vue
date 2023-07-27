@@ -8,6 +8,8 @@
 			<span class="icon iconfont icon-chucundingweiqi"></span>
 			<span class="icon iconfont icon-xinhao"></span>
 		</view>
+		
+		{{title}}
 	</view>
 </template>
 
@@ -18,8 +20,12 @@
 				title: 'Hello'
 			}
 		},
-		onLoad() {
-
+		async onLoad() {
+			console.log('index onLoad..')
+			console.log(this.$appName)
+			
+			const res = await this.$myRequest({url:'/frameworks'})
+			console.log(res)
 		},
 		methods: {
 
