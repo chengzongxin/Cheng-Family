@@ -1,26 +1,29 @@
 <template>
 	<view class="container">
-		<view class="avatar">
-			<uni-id-pages-avatar class="avatar" width="150rpx" height="150rpx"></uni-id-pages-avatar>
+		<view class="user">
+			<view class="avatar">
+				<uni-id-pages-avatar width="100rpx" height="100rpx"></uni-id-pages-avatar>
+			</view>
+			<text class="name" @click="setNickname('')">{{nickname}}</text>
 		</view>
-		<uni-list class="list">
-			<uni-list-item class="item" @click="setNickname('')" title="昵称" :rightText="data.nickname||'未设置'" link>
+		<!-- <uni-list class="list">
+			<uni-list-item class="item" @click="setNickname('')" title="昵称" :rightText="nickname||'未设置'" link>
 			</uni-list-item>
-		</uni-list>
+		</uni-list> -->
 		<uni-popup ref="dialog" type="dialog">
-			<uni-popup-dialog mode="input" :value="data.nickname" @confirm="setNickname"
+			<uni-popup-dialog mode="input" :value="nickname" @confirm="setNickname"
 				:inputType="setNicknameIng?'nickname':'text'" title="设置昵称" placeholder="请输入要设置的昵称">
 			</uni-popup-dialog>
 		</uni-popup>
-		
-		
-		<view class="bottomBar">
-			<button v-if="hasData == false" @click="toLogin">登录</button>
-			<view v-else>
-				<button @click="getUserInfo">更新个人信息</button>
-				<button @click="logout">退出</button>
+
+
+		<view class="dynamic">
+			<view class="content-btn" v-for="item in dynamics">
+				<text>{{item.title}}</text>
+				<text>{{item.num}}</text>
 			</view>
 		</view>
+
 	</view>
 </template>
 
@@ -35,18 +38,45 @@
 	export default {
 		data() {
 			return {
-				curpage: "forth",
-				data: {
-					nickname:''
-				},
-				hasData: false,
-				setNicknameIng: false
+				curpage: "mine",
+				setNicknameIng: false,
+				dynamics: []
+			}
+		},
+		computed: {
+			noLogin() {
+				return !store.hasLogin
+			},
+			nickname() {
+				return store.userInfo.nickname
 			}
 		},
 		async mounted() {
-			this.getUserInfo()
+			this.dynamics = [{
+					title: "11",
+					num: "发布"
+				},
+				{
+					title: "22",
+					num: "喜欢"
+				},
+				{
+					title: "33",
+					num: "收藏"
+				},
+				{
+					title: "44",
+					num: "足迹"
+				}
+			]
 		},
 		methods: {
+			onNavigationBarButtonTap(e) {
+				console.log(e)
+				uni.navigateTo({
+					url: '/pages/setting/setting'
+				})
+			},
 			toLogin() {
 				uni.navigateTo({
 					url: `/uni_modules/uni-id-pages/pages/login/login-withpwd?uniIdRedirectUrl=%252Fpages%252F${this.curpage}%252F${this.curpage}`,
@@ -60,14 +90,18 @@
 				let res = await usersTable.where("'_id' == $cloudEnv_uid")
 					.field('mobile,nickname,username,email,avatar_file')
 					.get()
-				
+
 				// const realNameRes = await uniIdCo.getRealNameInfo()
-				
-				console.log('fromDbData', res.result.data);
+
+				console.log('fromDbData', res.result.data)
+				uni.showToast({
+					title: JSON.stringify(res.result.data),
+					icon: 'none',
+					duration: 10000
+				})
 				const data = res.result.data[0]
 				if (data.nickname.length > 0) {
 					this.data = data
-					this.hasData = true
 				}
 			},
 			setNickname(nickname) {
@@ -85,21 +119,57 @@
 	}
 </script>
 
-<style>
-	.avatar {
-		margin-top: 100rpx;
-		border-radius: 50%;
-		/* width="260rpx" height="260rpx" */
+<style lang="scss">
+	.user {
+		display: flex;
+		align-items: center;
+		height: 100rpx;
 	}
+
+	.avatar {
+		width: 100rpx;
+		height: 100rpx;
+		border-radius: 50%;
+		overflow: hidden;
+		margin-left: 20px;
+	}
+
+	.name {
+		margin-left: 20px;
+		font-size: 44rpx;
+		font-weight: 700;
+	}
+
+
+	.dynamic {
+		margin-top: 20px;
+		display: flex;
+
+		.content-btn {
+			width: 25%;
+			height: 134rpx;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-around;
+			align-items: center;
+
+			text:first-child {
+				color: $primary-color;
+				font-size: 22px;
+				font-weight: 700;
+			}
+
+			text:last-child {
+				color: $placeholder-color;
+				font-size: 12px;
+			}
+
+		}
+	}
+
 	.list {
 		margin-top: 100rpx;
 	}
-	.container {
-	}
-	.bottomBar {
-		margin-top: 100rpx;
-/* 		left: 50%;
-		bottom: 0;
-		transform: translateX(-50%); */
-	}
+
+	.container {}
 </style>
