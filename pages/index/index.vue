@@ -57,13 +57,14 @@
 		async onLoad() {
 			console.log('index onLoad..')
 			console.log(this.$appName)
-
-			const res = await this.$myRequest({
-				url: '/frameworks'
-			})
-			console.log(res)
 		},
 		methods: {
+			onNavigationBarButtonTap(e) {
+				uni.navigateTo({
+					url:'/pages/publish/publish'
+				})
+				console.log(e)
+			},
 			changeIndicatorDots(e) {
 				this.indicatorDots = !this.indicatorDots
 			},
