@@ -12,14 +12,41 @@
 </template>
 
 <script>
+	import { store } from "@/uni_modules/uni-id-pages/common/store.js"
+	const db = uniCloud.database()
+	const usersTable = db.collection('uni-id-users')
 	export default {
 		data() {
 			return {
-
+				data: null
+			}
+		},
+		computed:{
+			noLogin(){
+				return !store.hasLogin
 			}
 		},
 		methods: {
 
+			async getUserInfo() {
+				console.log("update")
+				let res = await usersTable.where("'_id' == $cloudEnv_uid")
+					.field('mobile,nickname,username,email,avatar_file')
+					.get()
+
+				// const realNameRes = await uniIdCo.getRealNameInfo()
+
+				console.log('fromDbData', res.result.data)
+				uni.showToast({
+					title: JSON.stringify(res.result.data),
+					icon: 'none',
+					duration: 10000
+				})
+				const data = res.result.data[0]
+				if (data.nickname.length > 0) {
+					this.data = data
+				}
+			},
 		}
 	}
 </script>
