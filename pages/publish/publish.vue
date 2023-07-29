@@ -1,13 +1,9 @@
 <template>
-	<view>
+	<view class="container">
 		<button v-if="!hasImg" type="primary" @click="chooseImg">+</button>
-		<view class="imageList">
-			<image v-for="item in imgs" :src="item" mode=""></image>
-		</view>
+		<grid-image :imgs="imgs"></grid-image>
 		<input focus type="text" v-model="title" placeholder="请输入标题">
 		<textarea v-model="content" name="" id="" cols="30" rows="10"></textarea>
-		<image src="https://mp-f03fb0ab-2438-4197-be6d-9c6d1101d525.cdn.bspapp.com/pic/1690567551255.jpg" mode=""></image>
-		<button type="warn" @click="clearAllData">清理所有数据</button>
 	</view>
 </template>
 
@@ -32,10 +28,8 @@
 				return this.hasData
 			}
 		},
-		async mounted() {
-			let res = await userDynamicTable.get()
-			this.imgs = res.result.data[0].imgUrls
-			console.log("this.imgs：",this.imgs)
+		onLoad(e) {
+			this.getOpenerEventChannel().emit('publish',false)
 		},
 		methods: {
 			onNavigationBarButtonTap(e) {
@@ -54,7 +48,7 @@
 						cloudPath: "pic/" + Date.now(),
 						success: (res) => {
 							console.log('上传成功', res);
-							imgUrls.push(res.fileID + '.jpg')
+							imgUrls.push(res.fileID)
 							console.log("length: ",imgUrls.length,this.imgs.length)
 							if (imgUrls.length === this.imgs.length) {
 								console.log("imgUrls:", imgUrls)
@@ -70,18 +64,7 @@
 				uni.hideLoading()
 			},
 			async uploadwork(imgs) {
-				
 					console.log(imgs)
-					// const usersTable = db.collection('uni-id-users');
-					// userDynamicTable.get().then((res) => {
-					// 	// res 为数据库查询结果
-					// 	console.log(res)
-					// }).catch((e) => {
-					// 	console.log(e)
-					// });
-					
-					
-					
 					// 单条插入数据
 					let res = await userDynamicTable.add({
 						title: this.title,
@@ -90,6 +73,10 @@
 						imgUrls:imgs
 					})
 					console.log("res:",res)
+					if (res.success == true) {
+						this.getOpenerEventChannel().emit('publish',true)
+						uni.navigateBack()
+					}
 			},
 			chooseImg() {
 				console.log(this.title)
@@ -100,48 +87,32 @@
 						this.hasData = true
 					}
 				})
-			},
-			async clearAllData(){
-					// 清理全部数据
-					let res = await userDynamicTable.get()
-					console.log("resdata:",res.result.data)
-					res.result.data.map(async(document) => {
-					  return await userDynamicTable.doc(document._id).remove();
-					});
 			}
 		}
 	}
 </script>
 
 <style lang="scss">
-	button {
-		width: 100px;
-		height: 100px;
-		line-height: 100px;
-		font-size: 40px;
-		margin-top: 20px;
-		margin-left: 20px;
-	}
-
-	input {
+	.container {
 		margin: 20px;
-		background-color: $backgroundLight-color;
-	}
-
-	.imageList {
-		display: flex;
-		flex-wrap: wrap;
-		margin: 0 20px;
-
-		image {
-			margin: 5px;
-			width: 200rpx;
-			height: 200rpx;
+		
+		button {
+			width: 100px;
+			height: 100px;
+			line-height: 100px;
+			font-size: 40px;
+			margin-top: 20px;
+			margin-left: 0px;
 		}
-	}
-
-	textarea {
-		margin-left: 20px;
-		background-color: $backgroundGray-color;
+		
+		input {
+			background-color: $backgroundLight-color;		
+			margin-top: 20px;
+		}
+		
+		textarea {
+			margin-top: 20px;
+			background-color: $backgroundGray-color;
+		}
 	}
 </style>

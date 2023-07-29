@@ -74,14 +74,6 @@
 					url: '/pages/setting/setting'
 				})
 			},
-			toLogin() {
-				uni.navigateTo({
-					url: `/uni_modules/uni-id-pages/pages/login/login-withpwd?uniIdRedirectUrl=%252Fpages%252F${this.curpage}%252F${this.curpage}`,
-				})
-			},
-			logout() {
-				mutations.logout()
-			},
 			setNickname(nickname) {
 				if (nickname) {
 					mutations.updateUserInfo({
