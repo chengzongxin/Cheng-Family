@@ -26,17 +26,22 @@
 			console.log(this.$appName)
 		},
 		methods: {
-			async loadData(){
+			async loadData(stopRefresh) {
 				const res = await database.dynamicList()
 				console.log("dynamic list res", res.result.data)
 				this.dynamicList = res.result.data
+				if (stopRefresh) {
+					setTimeout(function() {
+						uni.stopPullDownRefresh();
+					}, 1000);
+				}
 			},
 			onNavigationBarButtonTap(e) {
 				uni.navigateTo({
 					url: '/pages/publish/publish',
-					events:{
-						publish:data=>{
-							console.log("get publish data:",data)
+					events: {
+						publish: data => {
+							console.log("get publish data:", data)
 							if (data == true) {
 								this.loadData()
 							}
@@ -44,6 +49,9 @@
 					}
 				})
 				console.log(e)
+			},
+			async onPullDownRefresh() {
+				this.loadData(true)
 			}
 		}
 	}
