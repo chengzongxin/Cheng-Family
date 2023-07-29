@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-		<feed-content :feeds="dynamicList"></feed-content>
+		<feed-content :feeds="dynamicList" @tapImageEvent="tapOneImg"></feed-content>
 	</view>
 </template>
 
@@ -26,6 +26,12 @@
 			console.log(this.$appName)
 		},
 		methods: {
+			tapOneImg(current,urls) {
+				uni.previewImage({
+					current,
+					urls
+				})
+			},
 			async loadData(stopRefresh) {
 				const res = await database.dynamicList()
 				console.log("dynamic list res", res.result.data)

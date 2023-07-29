@@ -79,6 +79,9 @@
 					const res = await database.addDynamic(dynamic)
 					console.log("addDynamic res:",res)
 					if (res.success == true) {
+						uni.showToast({
+							title:"发布成功！"
+						})
 						this.getOpenerEventChannel().emit('publish',true)
 						uni.navigateBack()
 					}

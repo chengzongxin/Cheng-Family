@@ -1,6 +1,6 @@
 <template>
 	<view class="imageList">
-		<image v-for="item in imgs" :src="item" mode="aspectFill"></image>
+		<image v-for="(item, index) in imgs" :src="item" @click="tapItem(index)" mode="aspectFill"></image>
 	</view>
 </template>
 
@@ -13,6 +13,12 @@
 				default: new Array
 			},
 		},
+		emit: ['tapImage'],
+		methods:{
+			tapItem(index){
+				this.$emit('tapImage', index, this.imgs)
+			}
+		}
 	}
 </script>
 

@@ -3,7 +3,7 @@
 		<view class="feed-content" v-for="item in feeds">
 			<text class="feed-title"> {{item.title}}</text>
 			<text class="feed-subtitle"> {{item.content}}</text>
-			<grid-image :imgs="item.imgUrls"></grid-image>
+			<grid-image :imgs="item.imgUrls" @tapImage="tapImg"></grid-image>
 		</view>
 	</view>
 </template>
@@ -16,7 +16,12 @@
 				default: new Array
 			},
 		},
-		emit: ['']
+		emit: ['tapImageEvent'],
+		methods:{
+			tapImg(index,imgs){
+				this.$emit('tapImageEvent',index,imgs)
+			}
+		}
 	}
 </script>
 
