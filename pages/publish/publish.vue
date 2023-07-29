@@ -9,6 +9,8 @@
 
 <script>
 	import { store } from "@/uni_modules/uni-id-pages/common/store.js"
+	import { database } from "@/utils/db.js";
+	import { date } from "@/utils/date.js"
 	
 	const db = uniCloud.database();
 	// 获取名为 `table1` 数据表的引用
@@ -45,7 +47,7 @@
 						filePath: img,
 						fileType: "image",
 						cloudPathAsRealPath: true,
-						cloudPath: "pic/" + Date.now(),
+						cloudPath: "pic/" + Date.now() + parseInt(Math.random()*10000),
 						success: (res) => {
 							console.log('上传成功', res);
 							imgUrls.push(res.fileID)
@@ -66,13 +68,16 @@
 			async uploadwork(imgs) {
 					console.log(imgs)
 					// 单条插入数据
-					let res = await userDynamicTable.add({
+					const dynamic = {
 						title: this.title,
 						content: this.content,
+						create_at: date.toString(),
+						create_at_time: date.timeStamp(),
 						// uid:$cloudEnv_uid,
 						imgUrls:imgs
-					})
-					console.log("res:",res)
+					}
+					const res = await database.addDynamic(dynamic)
+					console.log("addDynamic res:",res)
 					if (res.success == true) {
 						this.getOpenerEventChannel().emit('publish',true)
 						uni.navigateBack()

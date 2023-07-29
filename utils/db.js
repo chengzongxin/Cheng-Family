@@ -12,6 +12,21 @@ export const database = {
 			});
 		})
 	},
+	/*
+		title: 
+		content:
+		imgUrls:
+	*/
+	addDynamic(record){
+		return new Promise((resolve, reject) => {
+			dynamicTable.add(record).then((res) => {
+				resolve(res)
+			}).catch((e) => {
+				console.log(e)
+				reject(e)
+			})
+		})
+	},
 	// 清理全部数据
 	async cleardynamicList() {
 		let res = await dynamicTable.get()
