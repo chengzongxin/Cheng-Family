@@ -26,6 +26,10 @@
 			console.log(parseInt(Math.random()*10000))
 			console.log(parseInt(Math.random()*10000))
 			
+			const res = await this.$myRequest({
+				url: '/frameworks'
+			})
+			console.log(res)
 			
 		},
 		onload() {
