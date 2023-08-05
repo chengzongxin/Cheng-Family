@@ -1,6 +1,6 @@
 <template>
 	<view class="feed-container">
-		<view class="feed-content" v-for="item in feeds">
+		<view class="feed-content" v-for="(item,index) in feeds" :key="index">
 			<text class="feed-title"> {{item.title}}</text>
 			<text class="feed-subtitle"> {{item.content}}</text>
 			<grid-image :imgs="item.imgUrls" @tapImage="tapImg"></grid-image>

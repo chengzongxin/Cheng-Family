@@ -1,6 +1,6 @@
 <template>
 	<view class="imageList">
-		<image v-for="(item, index) in imgs" :src="item" @click="tapItem(index)" mode="aspectFill"></image>
+		<image v-for="(item, index) in imgs" :key="index" :src="item" @click="tapItem(index)" mode="aspectFill"></image>
 	</view>
 </template>
 

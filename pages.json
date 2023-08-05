@@ -199,6 +199,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/publishDynamic/publishDynamic",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

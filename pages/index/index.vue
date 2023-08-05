@@ -44,7 +44,7 @@
 			},
 			onNavigationBarButtonTap(e) {
 				uni.navigateTo({
-					url: '/pages/publish/publish',
+					url: '/pages/publishDynamic/publishDynamic',
 					events: {
 						publish: data => {
 							console.log("get publish data:", data)

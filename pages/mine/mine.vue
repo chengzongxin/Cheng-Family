@@ -18,7 +18,7 @@
 
 
 		<view class="dynamic">
-			<view class="content-btn" v-for="item in dynamics">
+			<view class="content-btn" v-for="item in dynamics" :key="item._id">
 				<text>{{item.title}}</text>
 				<text>{{item.num}}</text>
 			</view>
