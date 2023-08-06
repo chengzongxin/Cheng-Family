@@ -7,6 +7,10 @@
 				<uni-dateformat class="date" :date=item.create_at_time :threshold="[60000, 3600000]"></uni-dateformat>
 			</text>
 			<grid-image :imgs="item.imgUrls" @tapImage="tapImg"></grid-image>
+
+			<audio v-if="item.music" style="text-align: left" :src="item.music.url"
+				poster="https://img2.kuwo.cn/star/starheads/500/40/70/4171427597.jpg" :name="item.music.name"
+				author="unkown" action="audioAction" controls></audio>
 		</view>
 	</view>
 </template>

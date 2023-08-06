@@ -26,7 +26,7 @@
 			console.log(this.$appName)
 		},
 		methods: {
-			tapOneImg(current,urls) {
+			tapOneImg(current, urls) {
 				uni.previewImage({
 					current,
 					urls

@@ -12,6 +12,12 @@
 				<view class="box add" @click="chooseImg" v-if="files.length < 9">+</view>
 			</view>
 
+			<view class="">
+				<button type="default" @click="chooseMusic">{{music == null ? '上传音乐':`${music.name}`}}
+					<text style="font-size: 8px;color: #999;" v-if="music">{{`(${getFormatSize(music.size)})`}}</text>
+				</button>
+			</view>
+
 			<input focus type="text" name="title" placeholder="请输入标题">
 			<textarea name="content" id="" cols="30" rows="10"></textarea>
 			<view class="btns">
@@ -35,6 +41,7 @@
 		data() {
 			return {
 				files: [],
+				music: null
 			}
 		},
 		computed: {
@@ -45,14 +52,24 @@
 				// console.log('form发生了submit事件，携带数据为：' + JSON.stringify(e.detail.value))
 				var formdata = e.detail.value
 				const promissAll = this.files.map(item => {
-					return this.uploadFile(item)
+					return this.uploadImage(item)
 				})
+				if (this.music) {
+					const pm = this.uploadFile(this.music.path, "music/" + Date.now() + '-' + this.music.name)
+					promissAll.push(pm)
+				}
 				const imgs = await Promise.all(promissAll)
+				if (this.music) {
+					const music = {}
+					music.url = imgs.pop().fileID
+					music.name = this.music.name
+					formdata.music = music
+				}
 				formdata.imgUrls = imgs.map(item => item.fileID)
 				console.log(formdata)
 				const res = await database.addDynamic(formdata)
 				console.log("addDynamic res:", res)
-				if (res.success == true) {
+				if (res.success == true || res.code == 0 || res.errCode == 0) {
 					uni.showToast({
 						title: "发布成功！"
 					})
@@ -62,6 +79,15 @@
 			},
 			formReset(e) {
 				console.log('清空数据')
+			},
+			chooseMusic() {
+				uni.chooseFile({
+					count: 1,
+					success: (res) => {
+						console.log(res);
+						this.music = res.tempFiles[0]
+					}
+				})
 			},
 			getFormatSize(size) {
 				return format.dataUnit(size)
@@ -79,10 +105,13 @@
 				console.log(idx);
 				this.files.splice(idx, 1)
 			},
-			async uploadFile(item) {
+			async uploadImage(item) {
+				return this.uploadFile(item.path, "images/" + Date.now() + '-' + item.name)
+			},
+			async uploadFile(filePath, cloudPath) {
 				return await uniCloud.uploadFile({
-					filePath: item.path,
-					cloudPath: "images/" + Date.now() + '-' + item.name,
+					filePath,
+					cloudPath,
 					cloudPathAsRealPath: true
 				})
 			}
