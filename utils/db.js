@@ -1,10 +1,12 @@
 const db = uniCloud.database();
 const dynamicTable = db.collection('user-dynamic')
-
+import {
+	date
+} from "@/utils/date.js"
 export const database = {
 	dynamicList() {
 		return new Promise((resolve, reject) => {
-			dynamicTable.get().then((res) => {
+			dynamicTable.orderBy('create_at_time', 'desc').get().then((res) => {
 				resolve(res)
 			}).catch((e) => {
 				console.log("database err:", e)
@@ -17,8 +19,10 @@ export const database = {
 		content:
 		imgUrls:
 	*/
-	addDynamic(record){
+	addDynamic(record) {
 		return new Promise((resolve, reject) => {
+			record.create_at = date.toString()
+			record.create_at_time = date.timeStamp()
 			dynamicTable.add(record).then((res) => {
 				resolve(res)
 			}).catch((e) => {
