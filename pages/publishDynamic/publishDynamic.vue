@@ -49,7 +49,9 @@
 		},
 		methods: {
 			async formSubmit(e) {
-				// console.log('form发生了submit事件，携带数据为：' + JSON.stringify(e.detail.value))
+				uni.showLoading({
+					title: "正在提交..."
+				})
 				var formdata = e.detail.value
 				const promissAll = this.files.map(item => {
 					return this.uploadImage(item)
@@ -68,8 +70,14 @@
 				formdata.imgUrls = imgs.map(item => item.fileID)
 				console.log(formdata)
 				const res = await database.addDynamic(formdata)
+				uni.hideLoading()
+				const {
+					errCode,
+					id
+				} = res.result
+				console.log("res:", id, errCode)
 				console.log("addDynamic res:", res)
-				if (res.success == true || res.code == 0 || res.errCode == 0) {
+				if (id || parseInt(errCode) === 0) {
 					uni.showToast({
 						title: "发布成功！"
 					})
