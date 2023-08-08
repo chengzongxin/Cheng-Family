@@ -1,11 +1,9 @@
 <template>
 	<view class="feed-container">
-		<view class="feed-content" v-for="(item,index) in feeds" :key="index">
+		<view class="feed-content" v-for="(item,index) in feeds" :key="index" @click="tapCell(index,item)">
 			<text class="feed-title"> {{item.title}}</text>
 			<text class="feed-subtitle"> {{item.content}}</text>
-			<text><!-- 不显示刚刚/马上/xx分钟前 -->
-				<uni-dateformat class="date" :date=item.create_at_time :threshold="[60000, 3600000]"></uni-dateformat>
-			</text>
+			<uni-dateformat class="date" :date=item.create_at_time :threshold="[60000, 3600000]"></uni-dateformat>
 			<grid-image :imgs="item.imgUrls" @tapImage="tapImg"></grid-image>
 
 			<audio v-if="item.music" style="text-align: left" :src="item.music.url"
@@ -23,10 +21,13 @@
 				default: new Array
 			},
 		},
-		emit: ['tapImageEvent'],
+		emit: ['tapImageEvent', 'tapCellEvent'],
 		methods: {
 			tapImg(index, imgs) {
 				this.$emit('tapImageEvent', index, imgs)
+			},
+			tapCell(index, item) {
+				this.$emit('tapCellEvent', index, item)
 			}
 		}
 	}

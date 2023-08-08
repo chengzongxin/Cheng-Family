@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-		<feed-content :feeds="dynamicList" @tapImageEvent="tapOneImg"></feed-content>
+		<feed-content :feeds="dynamicList" @tapImageEvent="tapOneImg" @tapCellEvent="tapOneCell"></feed-content>
 	</view>
 </template>
 
@@ -26,6 +26,10 @@
 			console.log(this.$appName)
 		},
 		methods: {
+			tapOneCell(index, item) {
+				console.log(index, item._id);
+				this.navigateToPublish(item._id)
+			},
 			tapOneImg(current, urls) {
 				uni.previewImage({
 					current,
@@ -43,8 +47,13 @@
 				}
 			},
 			onNavigationBarButtonTap(e) {
+				this.navigateToPublish()
+			},
+			navigateToPublish(id) {
+				const url = '/pages/publishDynamic/publishDynamic' + (id ? `?id=${id}` : '')
+				console.log(";url : ", url);
 				uni.navigateTo({
-					url: '/pages/publishDynamic/publishDynamic',
+					url,
 					events: {
 						publish: data => {
 							console.log("get publish data:", data)
@@ -54,7 +63,6 @@
 						}
 					}
 				})
-				console.log(e)
 			},
 			async onPullDownRefresh() {
 				this.loadData(true)

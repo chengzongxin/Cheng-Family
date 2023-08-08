@@ -16,13 +16,17 @@
 				<button type="default" @click="chooseMusic">{{music == null ? '上传音乐':`${music.name}`}}
 					<text style="font-size: 8px;color: #999;" v-if="music">{{`(${getFormatSize(music.size)})`}}</text>
 				</button>
+				<button type="default" @click="chooseMovie">{{movie == null ? '上传电影':`${movie.name}`}}
+					<text style="font-size: 8px;color: #999;" v-if="movie">{{`(${getFormatSize(movie.size)})`}}</text>
+				</button>
 			</view>
 
-			<input focus type="text" name="title" placeholder="请输入标题">
-			<textarea name="content" id="" cols="30" rows="10"></textarea>
+			<input focus v-model="dynamicInfo.title" type="text" name="title" placeholder="请输入标题">
+			<textarea v-model="dynamicInfo.content" name="content" id="" cols="30" rows="10"></textarea>
 			<view class="btns">
 				<button form-type="submit" type="primary">Submit</button>
 				<button type="default" form-type="reset">Reset</button>
+				<button v-if="id" type="warn" @click="removeDynamic">Delete</button>
 			</view>
 			<!-- 		<video src="https://mp-f03fb0ab-2438-4197-be6d-9c6d1101d525.cdn.bspapp.com/images/YumiWallpaper.mp4"
 			controls></video> -->
@@ -40,12 +44,29 @@
 	export default {
 		data() {
 			return {
+				id: null,
 				files: [],
-				music: null
+				music: null,
+				movie: null,
+				title: '',
+				content: '',
+				dynamicInfo: {
+					title: '',
+					content: ''
+				}
 			}
 		},
 		computed: {
 
+		},
+		async onLoad(option) {
+			console.log(option);
+			this.id = option.id
+			if (this.id != null) {
+				const res = await database.getDynamic(this.id)
+				console.log(res);
+				this.dynamicInfo = res.result.data
+			}
 		},
 		methods: {
 			async formSubmit(e) {
@@ -56,8 +77,14 @@
 				const promissAll = this.files.map(item => {
 					return this.uploadImage(item)
 				})
+				// 添加音乐
 				if (this.music) {
 					const pm = this.uploadFile(this.music.path, "music/" + Date.now() + '-' + this.music.name)
+					promissAll.push(pm)
+				}
+				// 添加电影
+				if (this.movie) {
+					const pm = this.uploadFile(this.movie.path, "movie/" + Date.now() + '-' + this.movie.name)
 					promissAll.push(pm)
 				}
 				const imgs = await Promise.all(promissAll)
@@ -67,33 +94,77 @@
 					music.name = this.music.name
 					formdata.music = music
 				}
+				if (this.movie) {
+					const movie = {}
+					movie.url = imgs.pop().fileID
+					movie.name = this.movie.name
+					formdata.movie = movie
+				}
 				formdata.imgUrls = imgs.map(item => item.fileID)
 				console.log(formdata)
-				const res = await database.addDynamic(formdata)
-				uni.hideLoading()
+
+				try {
+
+					const res = await database.addDynamic(formdata)
+					uni.hideLoading()
+					const {
+						errCode,
+						id
+					} = res.result
+					console.log("res:", id, errCode)
+					console.log("addDynamic res:", res)
+					if (id || parseInt(errCode) === 0) {
+						uni.showToast({
+							title: "发布成功！"
+						})
+						this.getOpenerEventChannel().emit('publish', true)
+						uni.navigateBack()
+					}
+				} catch (e) {
+					//TODO handle the exception
+					console.log("add dynamic err:", e)
+					uni.showToast({
+						title: e.message
+					})
+				}
+
+			},
+			formReset(e) {
+				console.log('清空数据')
+			},
+			async removeDynamic() {
+				console.log("删除");
+				const res = await database.deleteDynamic(this.id)
+				console.log(res);
 				const {
 					errCode,
 					id
 				} = res.result
-				console.log("res:", id, errCode)
-				console.log("addDynamic res:", res)
 				if (id || parseInt(errCode) === 0) {
 					uni.showToast({
-						title: "发布成功！"
+						title: "删除成功！"
 					})
 					this.getOpenerEventChannel().emit('publish', true)
 					uni.navigateBack()
 				}
 			},
-			formReset(e) {
-				console.log('清空数据')
-			},
 			chooseMusic() {
 				uni.chooseFile({
 					count: 1,
+					type: 'image',
 					success: (res) => {
 						console.log(res);
 						this.music = res.tempFiles[0]
+					}
+				})
+			},
+			chooseMovie() {
+				uni.chooseFile({
+					count: 1,
+					type: 'video',
+					success: (res) => {
+						console.log(res);
+						this.movie = res.tempFiles[0]
 					}
 				})
 			},

@@ -14,6 +14,18 @@ export const database = {
 			});
 		})
 	},
+	getDynamic(id) {
+		return new Promise((resolve, reject) => {
+			dynamicTable.doc(id).get({
+				getOne: true
+			}).then((res) => {
+				resolve(res)
+			}).catch((e) => {
+				console.log("database err:", e)
+				reject(e)
+			});
+		})
+	},
 	/*
 		title: 
 		content:
@@ -24,6 +36,20 @@ export const database = {
 			record.create_at = date.toString()
 			record.create_at_time = date.timeStamp()
 			dynamicTable.add(record).then((res) => {
+				resolve(res)
+			}).catch((e) => {
+				console.log(e)
+				reject(e)
+			})
+		})
+	},
+	deleteDynamic(id) {
+		return new Promise((resolve, reject) => {
+			if (id.length < 0) {
+				reject(new Error("id为空"))
+				return
+			}
+			dynamicTable.doc(id).remove().then((res) => {
 				resolve(res)
 			}).catch((e) => {
 				console.log(e)
