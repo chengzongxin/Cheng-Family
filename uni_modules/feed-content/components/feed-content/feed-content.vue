@@ -9,6 +9,7 @@
 			<audio v-if="item.music" style="text-align: left" :src="item.music.url"
 				poster="https://img2.kuwo.cn/star/starheads/500/40/70/4171427597.jpg" :name="item.music.name"
 				author="unkown" action="audioAction" controls></audio>
+			<video v-if="item.movie" :src="item.movie.url" controls></video>
 		</view>
 	</view>
 </template>

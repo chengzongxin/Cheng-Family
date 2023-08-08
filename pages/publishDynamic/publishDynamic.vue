@@ -28,8 +28,6 @@
 				<button type="default" form-type="reset">Reset</button>
 				<button v-if="id" type="warn" @click="removeDynamic">Delete</button>
 			</view>
-			<!-- 		<video src="https://mp-f03fb0ab-2438-4197-be6d-9c6d1101d525.cdn.bspapp.com/images/YumiWallpaper.mp4"
-			controls></video> -->
 		</form>
 	</view>
 </template>
